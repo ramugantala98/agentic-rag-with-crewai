@@ -1,0 +1,28 @@
+router_task:
+  description: >
+    Analyse the keywords in the question {question}"
+    Based on the keywords decide whether it is eligible for a vectorstore search or a web search or generation.
+    Return a single word 'vectorstore' if it is eligible for vectorstore search.
+    Return a single word 'websearch' if it is eligible for web search.
+    Return a single word 'generate' if it is eligible for generation.
+    Do not provide any other premable or explaination.
+  expected_output: >
+    Give a  choice 'websearch' or 'vectorstore' or 'generate' based on the question"
+    Do not provide any other premable or explaination.
+  agent: router_Agent
+
+retriever_task :
+  description: >
+    Based on the response from the router task extract information for the question {question} with the help of the respective tool.
+    Use the web_serach_tool to retrieve information from the web in case the router task output is 'websearch'.
+    Use the rag_tool to retrieve information from the vectorstore in case the router task output is 'vectorstore'.
+    otherwise generate the output basedob your own knowledge in case the router task output is 'generate
+  expected_output: >
+    You should analyse the output of the 'router_task'
+    If the response is 'websearch' then use the web_search_tool to retrieve information from the web.
+    If the response is 'vectorstore' then use the rag_tool to retrieve information from the vectorstore.
+    If the response is 'generate' then use then use generation_tool .
+    otherwise say i dont know if you dont know the answer
+    Return a claer and consise text as response.
+  agent: retriever_Agent
+  
